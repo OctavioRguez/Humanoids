@@ -32,10 +32,10 @@ class ForwardKinematics:
 
     def _processing(self):
         self.__model = pinocchio.buildModelFromUrdf(self.__urdf_filename, self.__free_flyer) # Get model
-        print('Model name: ' + model.name)
+        print('Model name: ' + self.__model.name)
 
-        self.__data = model.createData() # Create data
-        self.__q = pinocchio.neutral(model) # Get configuration space
+        self.__data = self.__model.createData() # Create data
+        self.__q = pinocchio.neutral(self.__model) # Get configuration space
         print('q: %s' % self.__q.T)
 
 	self._flag = True # Change flag
@@ -43,7 +43,7 @@ class ForwardKinematics:
     def kinematics(self):
 	pinocchio.forwardKinematics(self.__model, self.__data, self.__q) # Calculate forward kinematics
 
-        for name, oMi in zip(model.names, data.oMi): # Print information from the model
+        for name, oMi in zip(self.__model.names, self.__data.oMi): # Print information from the model
             print(("{:<24} : {:.3f} {:.3f} {:.3f}".format(name, *oMi.translation.T)))
 
 # Stop Condition
